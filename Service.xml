@@ -7,6 +7,7 @@
   <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
   
   <Service name="Catalina">
+    <!-- Change this port dynamically at runtime -->
     <Connector port="8080" protocol="HTTP/1.1"
                connectionTimeout="20000"
                redirectPort="8443" />
