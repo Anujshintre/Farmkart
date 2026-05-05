@@ -4,17 +4,22 @@ RUN rm -rf /usr/local/tomcat/webapps/*
 
 COPY Farmkart.war /usr/local/tomcat/webapps/ROOT.war
 
-# Copy custom server.xml
-COPY server.xml /usr/local/tomcat/conf/server.xml
-
-# Create startup script with proper port substitution
+# Create startup script for Railway
 RUN echo '#!/bin/bash\n\
+# Railway provides PORT variable\n\
 if [ -n "$PORT" ]; then\n\
-    echo "Setting port to: $PORT"\n\
+    echo "Railway assigned PORT: $PORT"\n\
+    # Replace the connector port in server.xml\n\
     sed -i "s/port=\"8080\"/port=\"$PORT\"/g" /usr/local/tomcat/conf/server.xml\n\
+    echo "Tomcat now listening on port: $PORT"\n\
+else\n\
+    echo "PORT not set, using default 8080"\n\
 fi\n\
-echo "Starting Tomcat with port: $(grep -oP '"'"'port="\K[0-9]+'"'"' /usr/local/tomcat/conf/server.xml | head -1)"\n\
-catalina.sh run' > /usr/local/tomcat/bin/start.sh && \
-chmod +x /usr/local/tomcat/bin/start.sh
+# Show the configured port for debugging\n\
+grep -A1 "Connector port" /usr/local/tomcat/conf/server.xml | head -2\n\
+catalina.sh run' > /usr/local/tomcat/bin/railway-start.sh && \
+chmod +x /usr/local/tomcat/bin/railway-start.sh
 
-CMD ["/usr/local/tomcat/bin/start.sh"]
+EXPOSE 8080
+
+CMD ["/usr/local/tomcat/bin/railway-start.sh"]
