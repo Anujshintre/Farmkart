@@ -1,17 +1,14 @@
-# Use Tomcat with JDK 17
-FROM tomcat:10-jdk17
+# Use Tomcat 9 (compatible with javax.servlet)
+FROM tomcat:9-jdk17
 
 # Remove default apps
 RUN rm -rf /usr/local/tomcat/webapps/*
 
-# Copy your WAR to ROOT.war
-COPY AjaraBazar.war /usr/local/tomcat/webapps/ROOT.war
+# Copy WAR file
+COPY Farmkart.war /usr/local/tomcat/webapps/ROOT.war
 
-# Expose internal container port (not strictly needed, but good practice)
+# Expose port
 EXPOSE 8080
 
-# Use Railway's dynamic PORT environment variable
-ENV PORT 8080
-
-# Start Tomcat with the PORT Railway provides
-CMD ["sh", "-c", "CATALINA_OPTS='-Dport=$PORT' catalina.sh run"]
+# Start Tomcat
+CMD ["catalina.sh", "run"]
