@@ -7,10 +7,11 @@
   <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
   
   <Service name="Catalina">
-    <!-- Change this port dynamically at runtime -->
+    <!-- Port will be replaced by Railway's PORT env variable -->
     <Connector port="8080" protocol="HTTP/1.1"
                connectionTimeout="20000"
-               redirectPort="8443" />
+               redirectPort="8443"
+               address="0.0.0.0" />
     <Engine name="Catalina" defaultHost="localhost">
       <Host name="localhost" appBase="webapps"
             unpackWARs="true" autoDeploy="true">
